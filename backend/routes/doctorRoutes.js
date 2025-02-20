@@ -5,13 +5,12 @@ const { parseISO, format, addMinutes, isBefore, isEqual } = require('date-fns');
 
 const router = express.Router();
 
-// Get all doctors
 router.get('/', async (req, res) => {
     const doctors = await Doctor.find();
     res.json(doctors);
 });
 
-// Get available slots for a doctor
+// see available slots 
 router.get('/:id/slots', async (req, res) => {
     try {
         const { id } = req.params;
@@ -26,7 +25,7 @@ router.get('/:id/slots', async (req, res) => {
         let slots = [];
         let currentSlot = start;
 
-        // Get existing appointments
+
         const appointments = await Appointment.find({ doctorId: id, date: { $gte: start, $lt: end } });
 
         while (isBefore(currentSlot, end)) {
